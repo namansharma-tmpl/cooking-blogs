@@ -47,7 +47,7 @@ async function sync_db(){
 	await sequelize.sync({alter: true});
 }
 
-sync_db();
+// sync_db();
 // console.log('sync completed');
 
 db.sequelize = sequelize;
