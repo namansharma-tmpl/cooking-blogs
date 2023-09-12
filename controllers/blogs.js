@@ -5,8 +5,8 @@ async function blogs(req, res, next){
     try {
         req.query.pageNo = parseInt(req.query.pageNo);
         req.query.pageNo = !req.query.pageNo? 1: req.query.pageNo;
-        let result;
-        result = await db.Blog.findAll({
+        let result = {};
+        result.blogs = await db.Blog.findAll({
             limit: 6,
             offset: (req.query.pageNo - 1) * 6,
             attributes: {
@@ -17,6 +17,7 @@ async function blogs(req, res, next){
                 attributes: ['firstName', 'lastName', 'image'],
             }
         });
+        result.totalBlogs = await db.Blog.count();
         res.status(200).json(result);
         return;
     }

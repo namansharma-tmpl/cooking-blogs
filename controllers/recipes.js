@@ -4,11 +4,11 @@ const createError = require('http-errors');
 async function suggestions(req, res, next){
     // Endpoint: [api-endpoint]/recipes/suggestions?perPage={val}&categoryId={val}    
     try {
-        let result;
+        let result = {};
         req.query.perPage = req.query.perPage? parseInt(req.query.perPage): 4;
         req.query.categoryId = req.query.categoryId? parseInt(req.query.categoryId): null;
         if (req.query.categoryId){
-            result = await db.Recipe.findAll({
+            result.recipes = await db.Recipe.findAll({
                 limit: req.query.perPage,
                 where: {
                     CategoryId: req.query.categoryId,
@@ -26,10 +26,15 @@ async function suggestions(req, res, next){
                     model: db.Category,
                     attributes: ['value'],
                 }]
-            });            
+            });
+            result.totalRecipesOfCategory = await db.Recipe.count({
+                where: {
+                    CategoryId: req.query.categoryId,
+                }
+            });
         }
         else {
-            result = await db.Recipe.findAll({
+            result.recipes = await db.Recipe.findAll({
                 limit: req.query.perPage,
                 order: db.sequelize.random(),
                 attributes: {
@@ -45,7 +50,12 @@ async function suggestions(req, res, next){
                     model: db.Category,
                     attributes: ['value'],
                 }],
-            });            
+            });
+            result.totalRecipes = await db.Recipe.count({
+                where: {
+                    CategoryId: req.query.categoryId,
+                }
+            });
         }
         res.status(200).json(result);
         return;
