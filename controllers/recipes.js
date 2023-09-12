@@ -16,7 +16,7 @@ async function suggestions(req, res, next){
                 attributes: {
                     exclude: [
                         'ingredients', 'directions', 'cookingTime', 'nutritionInformation',
-                        'nutritionDetails', 'shortDescription', 'AuthorId', 'CategoryId',
+                        'nutritionDetails', 'shortDescription', 'AuthorId', 'CategoryId', 'updatedAt',
                     ],
                 },
                 include: [{
@@ -40,7 +40,7 @@ async function suggestions(req, res, next){
                 attributes: {
                     exclude: [
                         'ingredients', 'directions', 'cookingTime', 'nutritionInformation',
-                        'nutritionDetails', 'shortDescription', 'AuthorId', 'CategoryId',
+                        'nutritionDetails', 'shortDescription', 'AuthorId', 'CategoryId', 'updatedAt',
                     ]
                 },
                 include: [{
