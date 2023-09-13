@@ -10,7 +10,7 @@ async function blogs(req, res, next){
             limit: 6,
             offset: (req.query.pageNo - 1) * 6,
             attributes: {
-                exclude: ['updatedAt', 'content', 'CategoryId', 'AuthorId'],
+                exclude: ['updatedAt', 'content', 'AuthorId'],
             },
             include: {
                 model: db.Author,

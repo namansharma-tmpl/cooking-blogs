@@ -67,6 +67,34 @@ async function suggestions(req, res, next){
     }
 }
 
+async function recipes(req, res, next){
+    try {
+        req.query.pageNo = parseInt(req.query.pageNo);
+        req.query.pageNo = !req.query.pageNo? 1: req.query.pageNo;
+        let result = {};
+        result.blogs = await db.Recipe.findAll({
+            limit: 6,
+            offset: (req.query.pageNo - 1) * 6,
+            attributes: {
+                exclude: ['updatedAt', 'content', 'AuthorId', 'nutritionDetails', 'nutritionInformation',
+                    'preparationTime', 'cookingTime', 'directions', 'ingredients'],
+            },
+            include: {
+                model: db.Author,
+                attributes: ['firstName', 'lastName', 'image'],
+            }
+        });
+        result.totalRecipes = await db.Recipe.count();
+        res.status(200).json(result);
+        return;
+    }
+    catch (err){
+        console.log(err);
+        next(createError(500, "Something went wrong"));
+        return;
+    }
+}
+
 async function singleRecipe(req, res, next){
     try {
         let result;
@@ -97,6 +125,7 @@ async function singleRecipe(req, res, next){
 }
 
 module.exports = {
+    recipes,
     suggestions,
     singleRecipe,
 }
